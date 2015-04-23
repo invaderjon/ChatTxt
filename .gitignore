@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
+client
+server
 
 # Stack dumps
 *.exe.stackdump
