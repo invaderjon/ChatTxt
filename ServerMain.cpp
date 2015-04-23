@@ -4,8 +4,8 @@ int main(int argc, char** argv)
 {
   if (argc <= 1)
   {
-  	printf("No port specified. Exiting...\n");
-    return -1;
+  	printf("Usage: ./server [port]\n");
+    return 0;
   }
   
   boost::asio::io_service service;

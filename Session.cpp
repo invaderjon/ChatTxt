@@ -21,6 +21,8 @@ void Session::start()
   // register this session
   mManager.add(shared_from_this());
 
+  printf("Session starting...\n");
+
   // start listening for messages
   listen();
 }
@@ -29,6 +31,8 @@ void Session::kill()
 {
   // unregisters this session
   mManager.remove(shared_from_this());
+
+  printf("Session killed\n");
 
   // kills the socket
   error_code ec;

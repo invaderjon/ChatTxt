@@ -32,6 +32,7 @@ void Server::listen()
   if (!mRunning)
     return;
 
+  printf("Waiting for new connection...\n");
   SessionPtr session(new Session(mService, mSessionMgr));
   mAcceptor.async_accept(session->socket(),
 			 boost::bind(&Server::accept,
@@ -45,7 +46,10 @@ void Server::accept(SessionPtr session, const error_code& error)
   if (mRunning)
     {
       if (!error)
-	session->start();
+	{
+	  session->start();
+	  printf("Connection established\n");
+	}
 
       listen();
     }

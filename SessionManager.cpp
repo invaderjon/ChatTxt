@@ -12,10 +12,14 @@ SessionManager::~SessionManager()
 
 void SessionManager::kill()
 {
+  printf("Killing broadcast thread\n");
+
   // kills listener thread
   mRunning = false;
   mBCond.notify_one();
   mThread.join();
+
+  printf("Killing all sessions\n");
 
   // kills all sessions
   mMutex.lock();
@@ -35,6 +39,7 @@ void SessionManager::add(SessionPtr session)
   mMutex.lock();
   mSessions.insert(session);
   mMutex.unlock();
+  printf("Session added\n");
 }
 
 void SessionManager::remove(SessionPtr session)
@@ -48,6 +53,7 @@ void SessionManager::remove(SessionPtr session)
   if (mSessions.count(session))
     mSessions.erase(session);
   mMutex.unlock();
+  printf("Session removed\n");
 }
 
 void SessionManager::broadcast(MessagePtr msg)
@@ -70,9 +76,11 @@ void SessionManager::listen()
   while (mRunning)
     {
       // wait for messages
+      printf("Listening for new broadcasts...\n");
       boost::unique_lock<boost::mutex> lock(mBMutex);
       while (mBroadcastQ.empty() && mRunning)
 	mBCond.wait(lock);
+      printf("Broadcast message received!\n");
 
       // messages to be sent so send them
       if (mRunning)
@@ -91,4 +99,5 @@ void SessionManager::performBroadcast()
   std::for_each(mSessions.begin(), mSessions.end(),
 		boost::bind(&Session::write, _1, msg)); 
   mMutex.unlock(); 
+  printf("Message broadcasted: %s\n", msg->body());
 }
