@@ -1,11 +1,11 @@
 #include "Server.h"
 
-Server::Server(int port)
-  : mRunning(FALSE), mPort(port)
+Server::Server(io_service& service, const tcp::endpoint& endpoint)
+  : mRunning(false), mPort(port),
+    mService(service),
+    mAcceptor(service, endpoint),
+    mSessionMgr()
 {
-  // initializes components
-  initConnMgr();
-  initBroadcaster();
 }
 
 Server::~Server()
@@ -14,30 +14,39 @@ Server::~Server()
 
 void Server::start()
 {
-  // sets it up to run
+  // start listening
   mRunning = true;
   listen();
 }
 
 void Server::stop()
 {
-  
-}
-
-void Server::initConnMgr()
-{
-  
-}
-
-void Server::initBroadcaster()
-{
-  
+  // stop listening
+  mRunning = false;
+  mConnMgr.kill();
 }
 
 void Server::listen()
 {
-  while (mRunning)
+  // if we're not still running stop listening
+  if (!mRunning)
+    return;
+
+  SessionPtr session(new Session(mService, mSessionMgr));
+  mAccepter.async_accept(session->socket(),
+			 boost::bind(&Server::accept,
+				     this,
+				     session,
+				     boost::asio::placeholders::error));
+}
+
+void Server::accept(SessionPtr session, const error_code& error)
+{
+  if (mRunning)
     {
-      // loop to do shit
+      if (!error)
+	session->start();
+
+      listen();
     }
 }

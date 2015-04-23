@@ -1,21 +1,34 @@
 #ifndef __SERVER__
 #define __SERVER__
 
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/enabled_shared_from_this.hpp>
+#include <boost/asio.hpp>
+#include "Connection.h"
+
+using boost::asio::io_service;
+using boost::asio::ip::tcp;
+using boost::system::error_code;
+
 class Server
 {
  public:
-  Server(int port);
+  Server(io_service& service, const tcp::endpoint& endpoint);
   ~Server();
   void start();
   void stop();
-
- private:
-  void initConnMgr();
-  void initBroadcaster();
   void listen();
-
+  void accept(SessionPtr session, const error_code& error);
+    
+ private:
+  io_service&   mService;
+  tcp::acceptor mAcceptor;
+.
+  SessionManager mSessionMgr;
   bool mRunning;
-  int mPort;
 };
+
+typedef boost::shared_ptr<Server> ServerPtr;
 
 #endif
