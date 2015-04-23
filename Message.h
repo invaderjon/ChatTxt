@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include <vector>
 #include <stdio.h>
 #include <boost/shared_ptr.hpp>
@@ -12,7 +13,7 @@ class Message
 {
  public:
   Message();
-  Message(char* body, int length);
+  Message(const std::string& str);
   ~Message();
   
   char* raw();
@@ -30,7 +31,7 @@ class Message
   bool decodeHeader();
 
   enum { HeaderLength = 4 };
-  enum { MaxLength = 129 }; // max length is 128 visible characters
+  enum { MaxLength = 128 }; // max length is 128 visible characters
   
  private:
   std::vector<char> mRaw;

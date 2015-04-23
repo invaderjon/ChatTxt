@@ -1,21 +1,22 @@
 #include "Message.h"
 
 Message::Message()
-  : mRaw(HeaderLength, '\0'), mBody('\0', 1)
+  : mRaw(HeaderLength, '\0'), mBody(1, '\0')
 {
 }
 
-Message::Message(char* body, int length)
-  : mRaw(HeaderLength, '\0'), mBody('\0', length)
+Message::Message(const std::string& str)
+  : mRaw(HeaderLength, '\0'), mBody(str.length() + 1, '\0')
 {
   // trim to max size if necessary
-  if (length > MaxLength)
+  std::string out(str);
+  if (out.length() > MaxLength)
     {
-      mBody.resize(MaxLength);
-      length = MaxLength - 1;
+      mBody.resize(MaxLength + 1);
+      out = out.substr(0, MaxLength);
     }
   
-  memcpy(&mBody[0], body, length);
+  memcpy(&mBody[0], (char*)out.c_str(), out.length());
 }
 
 Message::~Message()
@@ -100,6 +101,7 @@ bool Message::decode()
     return true;
     }
 
+printf("TEST FAIL\n");
   return false;
 }
 
