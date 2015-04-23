@@ -29,9 +29,6 @@ re: cleanf all
 version:
 	@echo $(VERSION)
 
-make:
-	@echo $(CLIENT_OBJECTS)
-
 $(CLIENT_EXEC): $(CLIENT_OBJECTS)
 	$(CC) $(LDFLAGS) $(CLIENT_OBJECTS) -o $@ $(LIBS)
 
