@@ -1,0 +1,52 @@
+#encoding: utf-8
+Feature:ChatText
+        ChatText allows a collection of users to chat with each other
+        A client connects to a server which acts as a relay between the users.
+        The users will be able to see teir own messages as well as the messages sent by other users	
+
+        Scenario: Client-Send
+		Given		User client is connected to a server
+		When		User inputs and sends text
+		Then		Text box is cleared
+		And		Input text should appear in the chat box
+
+        Scenario: Client-Display
+		Given		User is connected to the server
+		And		There are other users on the server
+		When		New message is sent by other users
+		Then		New message is displayed in the chat box
+
+        Scenario: Server-turn-On
+                Given		Server is not running 
+                When		Server is initialized
+                Then		All resources will be also initialized
+                And		Server will be open for connections
+                And		Clients will be able to connect
+
+        Scenario: Server-turn-Off
+		Given		Server is running
+		When		Command to end server is given
+		Then		Resources will be freed
+		And		Connected clients will be disconnected
+
+        Scenario: Server-Relay
+                Given		User(s) are connected to the server
+                And		Server is running
+                When		Server recieves message from a client
+                Then		Server broadcasts message to all connected clients
+
+        Scenario: Server-Live-Check
+		Given		User(s) are connected
+		When		Server broadcasts message
+		And		Client(s) fail the IO check
+		Then		Client(s) are marked as dead
+		And		Client(s) are disconnected
+
+	Scenario: Server-Update-Log
+		Given		Server is running
+		When		Message is recieved
+		And		Server has finished broadcasting the message
+		Then		Server will append message to internal log
+
+
+
