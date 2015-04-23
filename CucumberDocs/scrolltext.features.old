@@ -1,0 +1,29 @@
+#encoding: utf-8
+Feature:ScrollText
+	ScrollText allows a collection of users to "shout out" to any other users that are viewing the page
+	It gives a delayed window into the mood of the current users. And we can see how the internet as a whole changes its mood
+	The logs made by ScrollText will be valued by future historians as a documented window into that time frame.
+
+	Scenario:Input
+		Given	String in the input text box
+		When	I submit the text
+		Then	The text is printed eventually
+		And		it is in a scrolling text format
+
+	Scenario:Change-Theme
+		Given	User is on the ScrollText page
+		When	User changes clicks on theme change
+		Then	User page refreshes with updated theme
+
+	Scenario:Access-Logs
+		Given	User is on the ScrollText page
+		When	User clicks on AccessLogs hyperlink
+		Then	User is directed to the log database page
+		And		User can click log to download them
+
+	Scenario:Clear-Data
+		Given	User is administrator
+		When	User clicks clear data button
+		Then	The queue is cleared 
+		And		Log is updated
+
