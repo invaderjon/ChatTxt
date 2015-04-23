@@ -3,7 +3,7 @@
 SessionManager::SessionManager()
   : mRunning(true),
     mThread(boost::bind(&SessionManager::listen,
-			shared_from_this());
+			shared_from_this()))
 {
 }
 
@@ -20,15 +20,13 @@ void SessionManager::kill()
 
   // kills all sessions
   mMutex.lock();
-  for (auto iter = mSessions.begin();
-       iter != mSessions.end();
-       ++iter)
-    (*iter)->kill();
+  std::for_each(mSessions.begin(), mSessions.end(),
+		boost::bind(&Session::kill, _1)); 
   mSessions.clear();
   mMutex.unlock();
 }
 
-void SessionManager::register(SessionPtr session)
+void SessionManager::add(SessionPtr session)
 {
   // don't proceed if already killed
   if (!mRunning)
@@ -40,7 +38,7 @@ void SessionManager::register(SessionPtr session)
   mMutex.unlock();
 }
 
-void SessionManager::unregister(SessionPtr session)
+void SessionManager::remove(SessionPtr session)
 {
   // don't proceed if already killed
   if (!mRunning)
@@ -48,7 +46,7 @@ void SessionManager::unregister(SessionPtr session)
 
   // remove the session
   mMutex.lock();
-  if (mSessions.find(session))
+  if (mSessions.count(session))
     mSessions.erase(session);
   mMutex.unlock();
 }
@@ -73,7 +71,7 @@ void SessionManager::listen()
   while (mRunning)
     {
       // wait for messages
-      boost::mutex::unique_lock<boost::mutex> lock(mBMutex);
+      boost::unique_lock<boost::mutex> lock(mBMutex);
       while (mBroadcastQ.empty() && mRunning)
 	mBCond.wait(lock);
 
@@ -91,9 +89,7 @@ void SessionManager::performBroadcast()
 
   // broadcasts it to all sessions
   mMutex.lock();
-  for (auto iter = mSessions.begin();
-       iter != mSessions.end();
-       ++iter)
-    (*iter)->write(msg);
+  std::for_each(mSessions.begin(), mSessions.end(),
+		boost::bind(&Session::write, _1, msg)); 
   mMutex.unlock(); 
 }

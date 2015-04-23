@@ -1,3 +1,4 @@
+
 #include "Session.h"
 #include "SessionManager.h"
 
@@ -10,7 +11,7 @@ Session::~Session()
 {
 }
 
-Session::socket()
+tcp::socket& Session::socket()
 {
   return mSocket;
 }
@@ -18,7 +19,7 @@ Session::socket()
 void Session::start()
 {
   // register this session
-  mManager.register(shared_from_this());
+  mManager.add(shared_from_this());
 
   // start listening for messages
   listen();
@@ -27,11 +28,11 @@ void Session::start()
 void Session::kill()
 {
   // unregisters this session
-  mManager.unregister(shared_from_this());
+  mManager.remove(shared_from_this());
 
   // kills the socket
   error_code ec;
-  socket.close(ec);
+  mSocket.close(ec);
 }
 
 void Session::write(MessagePtr msg)
@@ -41,16 +42,16 @@ void Session::write(MessagePtr msg)
 
   // appends the message to the queue
   mMutex.lock();
-  mWriteQ->push_back(msg);
+  mWriteQ.push_back(msg);
 
   // if a write isn't in progress then write
-  if (mWriteQ->size() == 1)
+  if (mWriteQ.size() == 1)
     {
       boost::asio::async_write(mSocket,
 			       boost::asio::buffer(msg->raw(), msg->rawLength()),
 			       boost::bind(&Session::onWritten,
 					   shared_from_this(),
-					   boost::asio::placeholder::error));
+					   boost::asio::placeholders::error));
     }
   mMutex.unlock();
 }
@@ -63,24 +64,24 @@ void Session::listen()
 			  boost::bind(&Session::onReadHeader,
 				      shared_from_this(),
 				      msg,
-				      boost::asio::placeholder::error));
+				      boost::asio::placeholders::error));
 }
 
 void Session::onReadHeader(MessagePtr msg, const error_code& error)
 {
   // make sure everything was successful
-  if (!error && mReadMsg.decodeHeader())
+  if (!error && msg->decodeHeader())
     {
       // read content
       boost::asio::async_read(mSocket,
-			      boost::asio::buffer(msg-rawBody(), msg->rawBodyLength()),
+			      boost::asio::buffer(msg->rawBody(), msg->rawBodyLength()),
 			      boost::bind(&Session::onReadBody,
 					  shared_from_this(),
 					  msg,
-					  boost::asio::placeholder::error));
+					  boost::asio::placeholders::error));
     }
   else // error
-    mManager.unregister(shared_from_this());
+    mManager.remove(shared_from_this());
 }
 
 void Session::onReadBody(MessagePtr msg, const error_code& error)
@@ -95,7 +96,7 @@ void Session::onReadBody(MessagePtr msg, const error_code& error)
       listen();
     }
   else // error
-    mManager.unregister(shared_from_this());
+    mManager.remove(shared_from_this());
 }
 
 void Session::onWritten(const error_code& error)
@@ -121,5 +122,5 @@ void Session::onWritten(const error_code& error)
       mMutex.unlock();
     }
   else // error
-    mManager.unregister(shared_from_this());
+    mManager.remove(shared_from_this());
 }

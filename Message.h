@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <stdio.h>
+#include <boost/shared_ptr.hpp>
 
 class Message
 {
@@ -34,5 +36,7 @@ class Message
   std::vector<char> mRaw;
   std::vector<char> mBody;
 };
+
+typedef boost::shared_ptr<Message> MessagePtr;
 
 #endif

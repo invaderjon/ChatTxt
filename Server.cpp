@@ -1,7 +1,7 @@
 #include "Server.h"
 
 Server::Server(io_service& service, const tcp::endpoint& endpoint)
-  : mRunning(false), mPort(port),
+  : mRunning(false),
     mService(service),
     mAcceptor(service, endpoint),
     mSessionMgr()
@@ -23,7 +23,7 @@ void Server::stop()
 {
   // stop listening
   mRunning = false;
-  mConnMgr.kill();
+  mSessionMgr.kill();
 }
 
 void Server::listen()
@@ -33,7 +33,7 @@ void Server::listen()
     return;
 
   SessionPtr session(new Session(mService, mSessionMgr));
-  mAccepter.async_accept(session->socket(),
+  mAcceptor.async_accept(session->socket(),
 			 boost::bind(&Server::accept,
 				     this,
 				     session,

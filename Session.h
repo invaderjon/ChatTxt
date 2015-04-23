@@ -2,17 +2,20 @@
 #define __SESSION__
 
 #include <deque>
-#include <boost/mutex.hpp>
 #include <boost/asio.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include "Message.h"
 
 using boost::asio::io_service;
-using boost::asio::tcp;
+using boost::asio::ip::tcp;
+using boost::system::error_code;
 
 class SessionManager;
 
 class Session
+  : public boost::enable_shared_from_this<Session>
 {
 
  public:
@@ -31,9 +34,11 @@ class Session
   void onWritten(const error_code& error);
 
   boost::mutex mMutex;
-  std::dequeue<MessagePtr> mWriteQ;
+  std::deque<MessagePtr> mWriteQ;
   tcp::socket mSocket;
   SessionManager& mManager;
 };
+
+typedef boost::shared_ptr<Session> SessionPtr;
 
 #endif

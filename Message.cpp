@@ -41,7 +41,7 @@ char* Message::rawBody()
 
 int Message::rawBodyLength()
 {
-  return mRaw.length() - HeaderLength;
+  return mRaw.size() - HeaderLength;
 }
 
 char* Message::body()
@@ -62,7 +62,7 @@ bool Message::encode()
   
   // maybe eventually base64 encode
   char* encoded = &mBody[0];
-  int len = mBody.length();
+  int len = mBody.size();
 
   // resize the raw string appropriately
   mRaw.resize(HeaderLength + len);
@@ -74,7 +74,12 @@ bool Message::encode()
 
   // copies the encoded message
   if (len > 0)
+    {
     memcpy(&mRaw[HeaderLength], encoded, len);
+    return true;
+    }
+  
+  return false;
 }
 
 bool Message::decode()
@@ -83,14 +88,19 @@ bool Message::decode()
 
   // maybe eventually base64 encode
   char* decoded = &mRaw[HeaderLength];
-  int length = mRaw.length() - HeaderLength;
+  int length = mRaw.size() - HeaderLength;
 
   // resizes the body to the appropriate size
   mBody.resize(length);
 
   // copies the data to the body
   if (length > 0)
+    {
     memcpy(&mBody[0], decoded, length);
+    return true;
+    }
+
+  return false;
 }
 
 bool Message::decodeHeader()
@@ -101,4 +111,6 @@ bool Message::decodeHeader()
 
   // resizes the raw buffer to the specified size
   mRaw.resize(atoi(header) + HeaderLength);
+
+  return true;
 }
