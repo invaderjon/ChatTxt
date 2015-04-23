@@ -2,8 +2,7 @@
 
 SessionManager::SessionManager()
   : mRunning(true),
-    mThread(boost::bind(&SessionManager::listen,
-			shared_from_this()))
+    mThread(boost::bind(&SessionManager::listen, this))
 {
 }
 
