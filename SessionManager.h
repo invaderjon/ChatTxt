@@ -28,12 +28,12 @@ class SessionManager
   void performBroadcast();
 
   bool mRunning;
-  boost::thread mThread;
+  std::set<SessionPtr> mSessions;
+  std::deque<MessagePtr> mBroadcastQ;
   boost::mutex mMutex;
   boost::mutex mBMutex;
   boost::condition_variable mBCond;
-  std::deque<MessagePtr> mBroadcastQ;
-  std::set<SessionPtr> mSessions;
+  boost::thread mThread;
 };
 
 #endif

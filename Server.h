@@ -24,12 +24,11 @@ class Server
   void accept(SessionPtr session, const error_code& error);
     
  private:
+  bool mRunning;
   io_service& mService;
   tcp::acceptor mAcceptor;
-
   SessionManager mSessionMgr;
-  bool mRunning;
-};
+ };
 
 typedef boost::shared_ptr<Server> ServerPtr;
 

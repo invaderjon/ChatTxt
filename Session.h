@@ -33,10 +33,10 @@ class Session
   void onReadBody(MessagePtr msg, const error_code& error);
   void onWritten(const error_code& error);
 
-  boost::mutex mMutex;
-  std::deque<MessagePtr> mWriteQ;
   tcp::socket mSocket;
   SessionManager& mManager;
+  std::deque<MessagePtr> mWriteQ;
+  boost::mutex mMutex;
 };
 
 typedef boost::shared_ptr<Session> SessionPtr;
