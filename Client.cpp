@@ -131,8 +131,41 @@ void Client::onReadBody(MessagePtr msg, const error_code& error)
             
       // prints the body
       if (!found)
-	printf("%s\n", msg->body());
-      
+		{
+		printf("%s\n", msg->body());
+      	if(0==strncmp(msg->body(),"/banksy",7))
+			{
+					printf("%s\n", "                       .s$$$Ss.");
+					printf("%s\n", "            .8,         $$$. _. .              ..sS$$$$$'  ...,.;");
+					printf("%s\n", "o.   ,@..  88        =.$'$'  '          ..sS$$$$$$$$$$$$s. _;''");
+					printf("%s\n", "  @@@.@@@. .88.   `  ` ""l. .sS$$.._.sS$$$$$$$$$$$$S'''");
+					printf("%s\n", "   .@@@q@@.8888o.         .s$$$$$$$$$$$$$$$$$$$$$'");
+					printf("%s\n", "     .:`@@@@33333.       .>$$$$$$$$$$$$$$$$$$$$'");
+					printf("%s\n", "     .: `@@@@333'       ..>$$$$$$$$$$$$$$$$$$$'");
+					printf("%s\n", "      :  `@@333.     `.,   s$$$$$$$$$$$$$$$$$'");
+					printf("%s\n", "      :   `@33       $$ S.s$$$$$$$$$$$$$$$$$'");
+					printf("%s\n", "      .S   `Y      ..`  ,'$' `$$$$$$$$$$$$$$");
+					printf("%s\n", "      $s  .       ..S$s,    . .`$$$$$$$$$$$$.");
+					printf("%s\n", "      $s .,      ,s ,$$$$,,sS$s.$$$$$$$$$$$$$.");
+					printf("%s\n", "      / /$$SsS.s. ..s$$$$$$$$$$$$$$$$$$$$$$$$$.");
+					printf("%s\n", "     /`.`$$$$$dN.ssS$$'`$$$$$$$$$$$$$$$$$$$$$$$.");
+					printf("%s\n", "    /     `$$$$$$$$$'    `$$$$$$$$$$$$$$$$$$$$$$.");
+					printf("%s\n", "   /  |     `S$$S$'       `$$$$$$$$$$$$$$$$$$$$$$.");
+					printf("%s\n", "  / /                      $$$$$$$$$$$$$$$$$$$$$.");
+					printf("%s\n", "                           `$$$$$$$$$$$$$$$$$$$$$s.");
+					printf("%s\n", "                            $$$''        .?T$$$$$$$");
+					printf("%s\n", "                           .$'        ...      ?$$# ");
+					printf("%s\n", "                           !       -=S$$$$$s");
+					printf("%s\n", "                         .!       -=s$$'  `$=-_      :");
+					printf("%s\n", "                        ,        .$$$'     `$,       .|");
+					printf("%s\n", "                       ,       .$$$'          .        ,");
+					printf("%s\n", "                      ,     ..$$$'");
+					printf("%s\n", "                          .s$$$'                 `s     .");
+					printf("%s\n", "                   .   .s$$$$'                    $s. ..$s");
+					printf("%s\n", "                  .  .s$$$$'                      `$s=s$$$");
+					printf("%s\n", "                    .$$$$'                         ,    $$s");
+			}
+		}
       // start listening for the next message
       listen();
     }
