@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 
   boost::thread t(boost::bind(&boost::asio::io_service::run, &service));
 
-  client.write(msg);
+  MessagePtr msg;
 
   std::string input; 
   while (true)
