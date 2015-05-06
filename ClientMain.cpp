@@ -39,7 +39,6 @@ int main(int argc, char** argv)
 
   boost::thread t(boost::bind(&boost::asio::io_service::run, &service));
 
-  MessagePtr msg(new Message("Hello world!"));  
   client.write(msg);
 
   std::string input; 

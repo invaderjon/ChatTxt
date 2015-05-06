@@ -27,9 +27,6 @@ void Client::write(MessagePtr msg)
   boost::lock_guard<boost::mutex> lock(mWMutex);
   mWriteQ.push_back(msg);
 
-  // sent message
-  printf("Message sent: %s\n", msg->raw());
-
   // notify of new message
   mWCond.notify_one();
 }
@@ -118,9 +115,6 @@ void Client::onReadBody(MessagePtr msg, const error_code& error)
   // make sure everything was successful
   if (!error && msg->decode())
     {
-      // broadcast the message
-      printf("Message received: %s\n", msg->body());
-      
       // start listening for the next message
       listen();
     }
