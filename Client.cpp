@@ -115,6 +115,9 @@ void Client::onReadBody(MessagePtr msg, const error_code& error)
   // make sure everything was successful
   if (!error && msg->decode())
     {
+      // prints the body
+      printf("%s\n", msg->body());
+      
       // start listening for the next message
       listen();
     }
