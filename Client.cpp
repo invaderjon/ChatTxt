@@ -26,6 +26,8 @@ void Client::write(MessagePtr msg)
   // append the message
   boost::lock_guard<boost::mutex> lock(mWMutex);
   mWriteQ.push_back(msg);
+  boost::lock_guard<boost::mutex> slock(mSMutex);
+  mSent.push_back(std::string(msg->body()));
 
   // notify of new message
   mWCond.notify_one();
@@ -76,7 +78,7 @@ void Client::flush()
 	  // get and remove next item
 	  MessagePtr msg = mWriteQ.front();
 	  mWriteQ.pop_front();
-
+	  
 	  // send it to the thread, but wait for other writes to finish
 	  mWSMutex.lock();
 	  boost::asio::async_write(mSocket,
@@ -115,8 +117,21 @@ void Client::onReadBody(MessagePtr msg, const error_code& error)
   // make sure everything was successful
   if (!error && msg->decode())
     {
+      // list of found messages
+      bool found = false;
+      boost::unique_lock<boost::mutex> slock(mSMutex);
+      for (auto iter = mSent.begin(); iter != mSent.end() && !found; ++iter)
+	{
+	  if (!strcmp(iter->c_str(), msg->body()))
+	    {
+	      found = true;
+	      mSent.erase(iter);
+	    }
+	}
+            
       // prints the body
-      printf("%s\n", msg->body());
+      if (!found)
+	printf("%s\n", msg->body());
       
       // start listening for the next message
       listen();

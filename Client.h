@@ -2,7 +2,10 @@
 #define __CLIENT__
 
 #include <cstdlib>
+#include <cstring>
 #include <deque>
+#include <list>
+#include <string>
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
@@ -35,8 +38,10 @@ class Client
   io_service& mService;
   tcp::socket mSocket;
   std::deque<MessagePtr> mWriteQ;
+  std::list<std::string> mSent;
   boost::mutex mWMutex; // write queue mutex
   boost::mutex mWSMutex; // write stream mutex
+  boost::mutex mSMutex; // sent mutex
   boost::condition_variable mWCond;
   boost::thread mThread;
 };
