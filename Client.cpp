@@ -165,6 +165,37 @@ void Client::onReadBody(MessagePtr msg, const error_code& error)
 					printf("%s\n", "                  .  .s$$$$'                      `$s=s$$$");
 					printf("%s\n", "                    .$$$$'                         ,    $$s");
 			}
+      	if(0==strncmp(msg->body(),"/shrek",6))
+			{
+					printf("%s\n", "                      _____");
+					printf("%s\n", "                   ,-'     `._");
+					printf("%s\n", "                 ,'           `.        ,-. ");
+					printf("%s\n", "               ,'               \       ),.\ ");
+					printf("%s\n", "     ,.       /                  \     /(  \; ");
+					printf("%s\n", "    /'\\     ,o.        ,ooooo.   \  ,'  `-') ");
+					printf("%s\n", "    )) )`. d8P'Y8.    ,8P'''''Y8.  `'  .--'' ");
+					printf("%s\n", "   (`-'   `Y'  `Y8    dP       `'     / ");
+					printf("%s\n", "    `----.(   __ `    ,' ,---.       ( ");
+					printf("%s\n", "           ),--.`.   (  ;,---.        )");
+					printf("%s\n", "          / \O_,' )   \  \O_,'        | ");
+					printf("%s\n", "         ;  `-- ,'       `---'        | ");
+					printf("%s\n", "         |    -'         `.           | ");
+					printf("%s\n", "        _;    ,            )          : ");
+					printf("%s\n", "     _.'|     `.:._   ,.::' `..       | ");
+					printf("%s\n", "  --'   |   .'     ""'         `      |`.");
+					printf("%s\n", "        |  :;      :   :     _.       |`.`.-'--. ");
+					printf("%s\n", "        |  ' .     :   :__.,'|/       |  \ ");
+					printf("%s\n", "        `     \--.__.-'|_|_|-/        /   ) ");
+					printf("%s\n", "         \     \_   `--^'__,'        ,    | ");
+					printf("%s\n", "   -hrr- ;  `    `--^---'          ,'     | ");
+					printf("%s\n", "          \  `                    /      / ");
+					printf("%s\n", "           \   `    _ _          /");
+					printf("%s\n", "            \           `       / ");
+					printf("%s\n", "             \           '    ,' ");
+					printf("%s\n", "              `.       ,   _,' ");
+					printf("%s\n", "                `-.___.---' ");
+			}
+
 		}
       // start listening for the next message
       listen();
